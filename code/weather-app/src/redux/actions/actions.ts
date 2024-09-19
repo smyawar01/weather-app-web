@@ -4,6 +4,12 @@ import { WeatherData } from "../../types/types";
 export const FETCH_WEATHER = "FETCH_WEATHER";
 export const SET_LOADING = "SET_LOADING";
 export const SET_ERROR = "SET_ERROR";
+export const FETCH_FORECAST = "FETCH_FORECAST";
+
+export const fetchForecast = (forecastData: WeatherData[]) => ({
+    type: FETCH_FORECAST,
+    payload: forecastData,
+});
 
 export const fetchWeather = (data: WeatherData) => ({
     type: FETCH_WEATHER,

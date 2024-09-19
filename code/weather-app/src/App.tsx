@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import SearchBar from './Components/SearchBar/SearchBar';
 import WeatherDisplay from './Components/WeatherDisply/WeatherDisplay';
+import ForecastList from './Components/ForecastList/ForecastList';
 
 const App: React.FC = () => {
     return (
@@ -11,6 +12,7 @@ const App: React.FC = () => {
                 <h1>Weather Information App</h1>
                 <SearchBar />
                 <WeatherDisplay />
+                <ForecastList />
             </div>
         </Provider>
     );
