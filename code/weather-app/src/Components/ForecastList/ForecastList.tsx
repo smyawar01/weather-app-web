@@ -1,18 +1,32 @@
 // ForecastList.tsx
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../types/types';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchForecast } from '../../redux/forecast/action';
+import { CenteredDiv, ContainerDiv, Content } from '../../styles';
+import { AppState } from '../../redux/store';
 
-const ForecastList: React.FC = () => {
-    const forecast = useSelector((state: AppState) => state.forecast);
+interface Props {
+    city: string;
+}
+const ForecastList: React.FC<Props> = ({ city }) => {
+    
+    const dispatch = useDispatch();
+    const { loading, data, error } = useSelector((state: AppState) => state.forecast);
 
-    if (!forecast.length) return <div>No forecast data available</div>;
+    useEffect(() => {
+        dispatch(fetchForecast(city));
+    }, [dispatch, city]);
 
-    return (
-        <div>
+    const showContent = () => {
+
+        if (loading) return <p>Loading forecast...</p>;
+        if (error) return <p>Error: {error}</p>;
+        if (!data.length) return <div>No forecast data available</div>;
+
+        <Content>
             <h2>Forecast</h2>
             <ul>
-                {forecast.map((item, index) => (
+                {data.map((item, index) => (
                     <li key={index}>
                         <p>Date: {item.date}</p>
                         <p>Temperature: {item.temp}°C</p>
@@ -21,7 +35,15 @@ const ForecastList: React.FC = () => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </Content>
+    }
+
+    return (
+        <ContainerDiv>
+            <CenteredDiv>
+                { showContent() }
+            </CenteredDiv>
+        </ContainerDiv>
     );
 };
 

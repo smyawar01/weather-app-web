@@ -10,7 +10,7 @@ test('renders search input', () => {
     const store = mockStore({ weather: null });
     render(
         <Provider store={store}>
-            <SearchBar />
+            <SearchBar onSearch={() => console.log('search clicked...')} />
         </Provider>
     );
     expect(screen.getByRole('textbox')).toBeInTheDocument();

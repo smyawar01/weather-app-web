@@ -1,21 +1,38 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../types/types';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrentWeather } from '../../redux/weather/action';
+import { CenteredDiv, ContainerDiv, Content } from '../../styles';
+import { AppState } from '../../redux/store';
 
-const WeatherDisplay: React.FC = () => {
-    const weather = useSelector((state: AppState) => state.weather);
-    const error = useSelector((state: AppState) => state.error);
+interface Props {
+    city: string;
+}
+const WeatherDisplay: React.FC<Props> = ({ city }) => {
+
+    const dispatch = useDispatch();
+    const { loading, data, error } = useSelector((state: AppState) => state.currentWeather);
+  
+    useEffect(() => {
+      dispatch(fetchCurrentWeather(city));
+    }, [dispatch, city]);
     
-    if (error) return <div>{error}</div>;
-    if (!weather) return <div>No data available</div>;
+    const showContent = () => {
 
+        if (loading) return <p>Loading current weather...</p>;
+        if (error) return <p>Error: {error}</p>;
+        return <Content>
+                    <h2>Weather Information</h2>
+                    <p>Temperature: {data.main.temp}°C</p>
+                    <p>Humidity: {data.main.humidity}%</p>
+                    <p>Conditions: {data.main.conditions}</p>
+                </Content>
+    }
     return (
-        <div>
-            <h2>Weather Information</h2>
-            <p>Temperature: {weather.temp}°C</p>
-            <p>Humidity: {weather.humidity}%</p>
-            <p>Conditions: {weather.conditions}</p>
-        </div>
+        <ContainerDiv>
+            <CenteredDiv>
+                {showContent()}
+            </CenteredDiv>
+        </ContainerDiv>
     );
 };
 
